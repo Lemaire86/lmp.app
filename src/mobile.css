@@ -1,0 +1,395 @@
+/* ==============================================================
+   mobile.css — chanjman ki fèt SÈLMAN pou vèsyon mobil la.
+   Fichye sa a chaje APRE styles.css, li kenbe menm apparans/tèm
+   lan men li adapte gabari a pou ekran telefòn ak tablèt.
+   ============================================================== */
+
+:root { --titlebar-h: 52px; }
+
+html, body {
+  height: 100%;
+  /* dvh respekte bar navigatè mobil yo (adrès/tab bar) ki parèt/disparèt */
+  height: 100dvh;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* Respekte "notch"/zòn sekirite aparèy la lè app la enstale kòm PWA */
+.titlebar {
+  height: var(--titlebar-h);
+  padding-top: env(safe-area-inset-top);
+  padding-left: max(10px, env(safe-area-inset-left));
+  padding-right: max(8px, env(safe-area-inset-right));
+}
+.app-shell { height: calc(100dvh - var(--titlebar-h)); }
+.nav-rail, .sidebar { top: var(--titlebar-h) !important; }
+
+/* ---------------- Titlebar: pi konpak, san bouton fenèt OS ---------------- */
+#btn-min, #btn-max, #btn-close { display: none !important; }
+/* Bouton notifikasyon an bò tit app la — pa itil sou vèsyon mobil la */
+#btn-notifications { display: none !important; }
+.brand-text { font-size: 11px; letter-spacing: .8px; }
+.titlebar-search { padding: 0 8px; }
+.titlebar-search .search-box { max-width: none; }
+
+/* An plen ekran, .fullscreen-target vin yon kouch (position:fixed;inset:0;
+   z-index:40) ki kouvri TOUT paj la, ki gen ladan bar anlè a (titlebar) ak
+   bar chèche a — se poutèt sa yo te "disparèt" pandan plen ekran. Lè meni an
+   (nav-rail) ouvri pandan app la an plen ekran, nou fè bar anlè a (ak bar
+   chèche a ladan l) parèt PA-DÈSI videyo a ankò, egzakteman jan l ye lè pa
+   gen plen ekran — konsa moun nan ka chèche yon chèn san l pa oblije kite
+   plen ekran an. */
+body.nav-panel-open.is-fs-active .titlebar,
+body.nav-panel-open.fs-fallback .titlebar,
+body.sidebar-panel-open.is-fs-active .titlebar,
+body.sidebar-panel-open.fs-fallback .titlebar {
+  position: relative !important; z-index: 58; display: flex !important;
+}
+/* Depi bar anlè a tounen vizib (règ pi wo a), pouse nav-rail/sidebar/nav-scrim
+   pi ba pase l (olye yo kole nan tèt ekran an nèt) pou yo pa kouvri l. */
+body.nav-panel-open.is-fs-active .nav-rail,
+body.nav-panel-open.is-fs-active .sidebar,
+body.nav-panel-open.is-fs-active .nav-scrim,
+body.nav-panel-open.fs-fallback .nav-rail,
+body.nav-panel-open.fs-fallback .sidebar,
+body.nav-panel-open.fs-fallback .nav-scrim,
+body.sidebar-panel-open.is-fs-active .nav-rail,
+body.sidebar-panel-open.is-fs-active .sidebar,
+body.sidebar-panel-open.is-fs-active .nav-scrim,
+body.sidebar-panel-open.fs-fallback .nav-rail,
+body.sidebar-panel-open.fs-fallback .sidebar,
+body.sidebar-panel-open.fs-fallback .nav-scrim {
+  top: var(--titlebar-h) !important;
+}
+
+/* ---------------- Transport: retire +10s/-10s, vitès, ak "Ajoute Soutit" ---------------- */
+#btn-skip-back, #btn-skip-fwd, #btn-speed, #btn-subtitle { display: none !important; }
+
+/* ---------------- Meni yo (nav-rail + sidebar) tounen popup ki santre
+   SÈLMAN sou telefòn (ekran etwat). Sou tablèt yo rete jan yo te ye
+   sou desktop (panno kole sou kote, plis pwofesyonèl, plis plas). ---------------- */
+@media (max-width: 700px) {
+  .nav-rail, .sidebar {
+    left: 50% !important; right: auto; bottom: auto !important;
+    top: 50% !important;
+    width: min(92vw, 420px) !important; min-width: 0 !important;
+    max-height: min(86dvh, 720px);
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid var(--panel-border);
+    box-shadow: 0 30px 90px rgba(0,0,0,0.65);
+    transform: translate(-50%, -50%) scale(0.92);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform .22s cubic-bezier(.2,.8,.3,1), opacity .18s ease;
+  }
+  .nav-rail.open, .sidebar.open {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+    pointer-events: auto;
+  }
+  /* Mòd "kolapse nan yon ti barèt ikòn" nan pa itil sou yon popup mobil */
+  #btn-nav-collapse { display: none; }
+  .nav-rail.collapsed { width: min(92vw, 420px) !important; padding: 16px 12px 12px; }
+  .nav-rail.collapsed .nav-brand-text, .nav-rail.collapsed .nav-labels,
+  .nav-rail.collapsed .nav-footer-card, .nav-rail.collapsed .nav-social-row a { display: revert; }
+  .nav-rail.collapsed .nav-item { justify-content: flex-start; }
+  .nav-rail.collapsed .nav-brand-block { justify-content: flex-start; }
+}
+
+/* ---------------- Videyo santre TOUT TAN (òdinatè/tablèt) ----------------
+   ANSYEN apwòch: lè yon panno (nav-rail/sidebar) louvri, nou te "pouse" zòn
+   videyo a (.stage) ak yon margin-left ki egal ak lajè panno a, pou l
+   re-santre nan espas ki rete a. Pwoblèm: sa te depann de yon match egzat
+   ant lajè panno a (220/320/260/74px) ak vrè lajè li — nenpòt ti diferans
+   (responsive, animasyon, plizyè panno ansanm, elatriye) te fè videyo a
+   parèt dekale/koupe sou bò dwat, e menm pandan fullscreen si yon panno te
+   rete "louvri" (jan JS la kenbe eta a) pandan n antre an plen ekran.
+   KOUNYE A: .stage pa janm deplase — li toujou ranpli lajè TOTAL ekran an,
+   kidonk videyo a rete MATEMATIKMAN santre, kèlkeswa gwosè ekran ou ak
+   kèlkeswa si yon panno louvri (an fullscreen oswa pa). Panno yo vin flote
+   tou tranparan PA-DÈSI videyo a olye pou yo "pouse" li (gade pi ba,
+   "Panno yo (nav-rail/sidebar) rete tou tranparan lè yo louvri"). */
+@media (min-width: 701px) {
+  .stage { margin-left: 0 !important; }
+}
+
+/* Panno yo (nav-rail/sidebar) rete tou tranparan lè yo louvri — sou
+   TOUT gwosè ekran, pa sèlman an fullscreen — pou videyo a toujou vizib
+   (e toujou santre) dèyè yo olye pou yo "pouse" li sou kote. */
+@media (min-width: 701px) {
+  .nav-rail.open, .sidebar.open {
+    background: rgba(8,12,24,0.86);
+    backdrop-filter: blur(16px);
+  }
+}
+
+/* Sifas tap pi gwo pou dwèt — pou TOUT aparèy tach (telefòn ak tablèt). */
+@media (pointer: coarse) {
+  .nav-item, .cat-btn, .category-chip, .track-item, .pill-btn, .ghost-btn { min-height: 40px; }
+}
+
+/* ---------------- Retire enfo chèn/stream (kite sèlman player a ak paramèt li) ---------------- */
+.info-row { display: none !important; }
+/* Bouton "View" pa gen anyen pou l montre/kache ankò depi info-row disparèt nèt sou mobil */
+#btn-view-toggle { display: none !important; }
+/* San info-row, ak san mòd "view-off" (retire pi wo a), ekran videyo a
+   toujou pran tout espas ki rete a jiska tèt bouton play la — otomatikman,
+   paske .stage-media se yon flex:1 anndan .fullscreen-target. */
+
+/* ---------------- Ansyen ranje aksyon an (Screenshot/Record/Settings/flèch) vid
+   kounye a — tout 4 bouton yo deplase bò kot bouton volim la (mobile-enhancements.js).
+   Kache ranje a nèt pou l pa kite yon espas vid. ---------------- */
+.action-toolbar { display: none !important; }
+
+/* Player Settings, Record, Screenshot ak flèch monte a: kounye a yo nan menm ranje
+   (transport, anba nèt) ak bouton volim lan, ak MENM GWOSÈ ak lòt bouton kontwòl
+   yo (.ctl-btn — 38x38, menm jan ak mize/plen ekran/elatriye). */
+.mobile-inline-ctl {
+  width: 38px; height: 38px; padding: 0; border-radius: var(--radius-sm, 10px);
+  display: flex; align-items: center; justify-content: center; flex: 0 0 auto;
+  gap: 0; background: rgba(255,255,255,0.04); border: 1px solid rgba(120,150,220,0.18);
+  color: var(--ink-1); min-width: 0;
+}
+.mobile-inline-ctl .action-labels { display: none; }
+.mobile-inline-ctl .action-ic { font-size: 16px; line-height: 1; }
+.mobile-inline-ctl.mobile-expand-btn { font-size: 14px; }
+.mobile-inline-ctl.mobile-expand-btn.open,
+#btn-record.mobile-inline-ctl.recording {
+  color: var(--blue-3); border-color: var(--blue-3); background: rgba(60,110,255,0.15);
+}
+
+/* Ranje dwat kontwòl la ka gen jiska 8 bouton kounye a sou telefòn — kite l vlope
+   sou plizyè liy si li pa ka kenbe nan yon sèl liy olye pou l debòde ekran an. */
+.controls-right { flex-wrap: wrap; row-gap: 8px; justify-content: flex-end; }
+
+/* Pano "k ap jwe kounye a" (info-row) — rete kache pa defo sou mobil (pi wo),
+   men parèt kòm yon ti pano transparan (nan flux la, jis anlè aksyon yo)
+   lè ou peze flèch monte a. Lòd eksplisit (order) ki fòse pano a rete DIRÈK
+   ANLÈ ranje transpò a (bar seek/play/volim) — pa anba l — kèlkeswa lòd
+   DOM oswa yon depasman (overflow) videyo a ta ka lakòz. */
+.fullscreen-target { display: flex; flex-direction: column; }
+.video-header { order: 0; }
+.stage-media { order: 1; min-height: 0; flex-shrink: 1; }
+.info-row { order: 2; flex-shrink: 0; }
+.action-toolbar { order: 3; }
+.transport { order: 4; flex-shrink: 0; }
+.info-row.mobile-open {
+  display: flex !important;
+  flex-wrap: wrap; gap: 10px; margin: 0 10px 8px; padding: 10px 12px;
+  background: rgba(8,12,24,0.88); backdrop-filter: blur(14px);
+  border: 1px solid var(--panel-border); border-radius: 14px;
+  box-shadow: 0 12px 34px rgba(0,0,0,0.4);
+  max-height: 34vh; overflow-y: auto;
+}
+
+/* Bouton "Player Settings" anba ekran an — retire l nèt, jan yo mande l. */
+#btn-player-settings { display: none !important; }
+
+/* Bouton "flèch monte" (pano k ap jwe kounye a): pa itil an plen ekran — retire l
+   lè app la an plen ekran (vrè oswa an "fallback"), rete vizib sèlman lè pa gen
+   plen ekran, kote li itil pou wè enfo san kite paj la. */
+.fullscreen-target.is-fs #btn-mobile-info-toggle,
+body.fs-fallback #btn-mobile-info-toggle { display: none !important; }
+
+/* ---------------- Mini Player: ti videyo k ap flote nan yon kwen pandan w ap
+   navige lòt seksyon (lis chèn, paramèt, elt.) san lekti a pa rete. Lè l aktif,
+   se SÈLMAN bouton play la, bar lekti a (seek), ak bouton mini player a
+   (pou soti) ki rete vizib — tout rès kontwòl/enfo yo kache. ---------------- */
+#btn-mini-player { display: flex !important; }
+
+body.mini-mode #fullscreen-target {
+  position: fixed !important;
+  top: auto !important; left: auto !important;
+  right: max(12px, env(safe-area-inset-right)) !important;
+  bottom: max(12px, env(safe-area-inset-bottom)) !important;
+  width: min(88vw, 300px) !important; height: auto !important;
+  aspect-ratio: 16 / 9;
+  z-index: 90; border-radius: 14px; overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.16);
+}
+body.mini-mode .video-header,
+body.mini-mode .info-row,
+body.mini-mode .action-toolbar,
+body.mini-mode .seek-row .time,
+body.mini-mode .seek-row .live-dot,
+body.mini-mode .controls-left,
+body.mini-mode #btn-prev,
+body.mini-mode #btn-stop,
+body.mini-mode #btn-next,
+body.mini-mode .controls-right > *:not(#btn-mini-player) { display: none !important; }
+body.mini-mode .stage-media { flex: 1 1 auto; }
+body.mini-mode .transport {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 8;
+  padding: 4px 8px 6px; background: linear-gradient(to top, rgba(4,8,20,0.92), transparent);
+}
+body.mini-mode .seek-row { margin-bottom: 2px; }
+body.mini-mode .controls-row { padding: 0; }
+body.mini-mode .controls-center { gap: 6px; }
+body.mini-mode .play-btn { width: 32px; height: 32px; }
+body.mini-mode #btn-mini-player { width: 26px; height: 26px; }
+/* Sou telefòn, kite ti videyo a rive jouk bò goch tou si li twò laj. */
+@media (max-width: 420px) { body.mini-mode #fullscreen-target { width: min(88vw, 260px) !important; } }
+
+/* ---------------- Transport: pi laj pou dwèt ka touche l fasil ---------------- */
+.transport { padding: 6px max(14px, env(safe-area-inset-right)) max(10px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left)); }
+.ctl-btn { width: 38px; height: 38px; }
+.play-btn { width: 54px; height: 54px; }
+.controls-row { flex-wrap: wrap; row-gap: 8px; }
+
+/* ---------------- Bouton mize/demize + bar volim: toude vizib e SEPARE tout tan,
+   olye yon sèl bouton ki te dwe ni mize son ni fè yon ti liy vètikal (rotate 90°)
+   parèt an popup — teknik sa a te boge sou touch (glise sou yon eleman ki gen yon
+   rotate CSS mache mal ak evènman tach yo). Kounye a bar la se yon bar òdinè,
+   orizontal, toujou vizib, jis kòm li ye sou vèsyon òdinatè a, e li pa mele ak
+   bouton mize/demize a ki rete yon bouton apa ak sèl travay li (mize/demize). */
+.volume-wrap { display: flex; align-items: center; gap: 6px; position: relative; }
+.volume-wrap #volume-bar { display: block; width: 64px; flex: 0 0 auto; }
+/* Ti bouton (thumb) pi gwo pase sou òdinatè, pou dwèt ka kenbe l fasil san manke l. */
+.volume-wrap #volume-bar::-webkit-slider-thumb { width: 18px; height: 18px; margin-top: -7px; }
+.volume-wrap #volume-bar::-moz-range-thumb { width: 18px; height: 18px; border: none; border-radius: 50%; background: var(--blue-3); }
+
+/* ---------------- Settings panel: plen lajè a, kategori yo anlè olye bò kote (telefòn sèlman) ---------------- */
+@media (max-width: 700px) {
+  .settings-panel { width: 100vw; max-width: 100vw; }
+  .settings-body { flex-direction: column; }
+  .settings-cats {
+    flex-direction: row; flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden;
+    width: auto; min-width: 0; gap: 6px; padding-bottom: 8px;
+    border-right: none; border-bottom: 1px solid var(--panel-border);
+  }
+  .settings-cats .cat-btn { flex: 0 0 auto; white-space: nowrap; }
+}
+
+/* ==============================================================
+   Plen ekran (fullscreen): rann videyo a "peyizaj" otomatikman sou
+   telefòn/tablèt, e kite aksè a meni chèn/playlist san kite fullscreen.
+   ============================================================== */
+
+/* 1) Lè API Screen Orientation la disponib (Android Chrome), JS la
+   (renderer.js) fè yon lock('landscape') reyèl. 2) Kòm sekou pou
+   aparèy ki PA sipòte lock sa a (notaman Safari sou iPhone/iPad),
+   nou "fo-vire" tout kontni fullscreen lan ak yon woulman CSS pandan
+   aparèy la rete fizikman an pòtrè — teknik byen konni pou fòse yon
+   rann-yo peyizaj san mande itilizatè a vire telefòn l. */
+@media screen and (orientation: portrait) {
+  .fullscreen-target.is-fs {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vh;
+    height: 100vw;
+    /* dvh/dvw respekte chanjman ki fèt sou bar navigatè a (adrès/tab bar)
+       lè app la antre an fullscreen — san sa, 100vh/100vw ka rete ak
+       ansyen gwosè ekran an pandan yon ti moman e fè videyo a parèt
+       "detire" (stretch) olye "fit", menmsi mòd la pa janm chanje. */
+    width: 100dvh;
+    height: 100dvw;
+    transform-origin: top left;
+    transform: rotate(90deg) translateY(-100%);
+  }
+}
+
+/* Bouton "meni" yo (chwazi seksyon + lis chèn/playlist) rete aksesib
+   an fullscreen — yo flote anlè adwat, e yo swiv menm règ
+   parèt/disparèt (tape ekran) ak rès kontwòl yo (fs-idle). */
+.fullscreen-target.is-fs .video-header {
+  display: flex;
+  position: absolute; top: 0; left: 0; right: 0; z-index: 9;
+  background: linear-gradient(to bottom, rgba(4,8,20,0.7) 0%, transparent 100%);
+  border-bottom: none;
+  padding: max(12px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) 26px max(14px, env(safe-area-inset-left));
+  justify-content: flex-end;
+  gap: 10px;
+}
+.fullscreen-target.is-fs .vh-titles,
+.fullscreen-target.is-fs .vh-section-label { display: none; }
+.fullscreen-target.is-fs .vh-actions { display: flex; gap: 10px; flex: 0 0 auto; }
+.fullscreen-target.is-fs .vh-actions button {
+  width: 42px; height: 42px; padding: 0; border-radius: 50%;
+  background: rgba(10,14,26,0.55); backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,0.18);
+  display: flex; align-items: center; justify-content: center; font-size: 17px;
+}
+
+/* Bar chèche a (deplase anndan bar anlè sa a pandan plen ekran, pa JS —
+   gade "moveSearchBoxForFullscreen" nan renderer.js) — li swiv EGZAKTMAN
+   menm règ parèt/disparèt (fs-idle) ak bouton play la, e li rete aktif
+   (moun nan ka tape ladan l) depi bar la vizib. Li pozisyone ANFAS
+   (position:absolute + translateX -50%) pou l rete DIRÈKteman nan mitan
+   lajè ekran an, endepandaman de bouton vh-actions yo bò dwat. */
+.fullscreen-target.is-fs .video-header .search-box {
+  position: absolute;
+  left: 50%;
+  top: max(12px, env(safe-area-inset-top));
+  transform: translateX(-50%);
+  flex: none;
+  width: min(380px, 62vw);
+  max-width: 380px;
+  min-width: 0;
+  margin-bottom: 0;
+}
+.fullscreen-target.is-fs .video-header .search-box input {
+  background: rgba(10,14,26,0.6); backdrop-filter: blur(6px);
+  border-color: rgba(255,255,255,0.22);
+}
+
+/* Le meni (nav-rail/sidebar) ouvri PANDAN nou an fullscreen, li rete
+   yon ti kras transparan pou videyo a toujou vizib dèyè l — konsa ou
+   ka chèche/chwazi yon lòt chèn san w pa gen enpresyon ou kite lekti a. */
+body.is-fs-active .nav-rail.open,
+body.is-fs-active .sidebar.open {
+  background: rgba(8,12,24,0.82);
+  backdrop-filter: blur(14px);
+}
+
+/* Fullscreen aktive sou .app-shell antye a (pa sèlman #fullscreen-target) —
+   sa vle di titlebar la disparèt (li se yon frè .app-shell, li rete deyò),
+   e nav-rail/sidebar dwe kole anlè tèt ekran an (pa dekale pa wotè titlebar
+   la, ki pa vizib ankò). */
+body.is-fs-active .nav-rail,
+body.is-fs-active .sidebar,
+body.is-fs-active .nav-scrim { top: 0 !important; }
+
+/* Sekou "fo-fullscreen" (aparèy/navigatè ki refize API Fullscreen reyèl la,
+   sitou kèk tablèt): nou fòse .app-shell pran tout ekran an ak CSS. Nav-rail
+   ak sidebar deja gen z-index pi wo pase videyo a, kidonk yo kontinye parèt
+   pa-dèsi san okenn lòt chanjman. */
+body.fs-fallback .titlebar { display: none !important; }
+body.fs-fallback .app-shell {
+  position: fixed; inset: 0; z-index: 39;
+  height: 100vh; height: 100dvh;
+}
+
+/* ---------------- Jesti gliseman: volim (dwat) / limnozite (goch) ---------------- */
+.gesture-hud {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  display: flex; align-items: center; gap: 8px;
+  background: rgba(8,12,24,0.75); backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.14); border-radius: 30px;
+  padding: 8px 14px; z-index: 20; pointer-events: none;
+  opacity: 0; transition: opacity .18s ease;
+}
+.gesture-hud.show { opacity: 1; }
+.gesture-hud-ic { font-size: 16px; line-height: 1; }
+.gesture-hud-track { width: 90px; height: 5px; border-radius: 3px; background: rgba(255,255,255,0.18); overflow: hidden; }
+.gesture-hud-fill { height: 100%; background: var(--blue-3, #4d8dff); border-radius: 3px; }
+.gesture-hud-val { font-size: 11px; font-weight: 700; color: var(--ink-1); min-width: 30px; text-align: right; }
+
+/* ---------------- "Tape pou jwe": parèt sèlman si yon lekti otomatik te bloke
+   (règ navigatè mobil yo) — jès sa a (tap) toujou akseptab, li "dezenkle" videyo
+   a san l pa rete "kole" san okenn siy pou itilizatè a. ---------------- */
+.tap-resume-hint {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.85);
+  width: 64px; height: 64px; border-radius: 50%; padding: 0;
+  background: rgba(10,14,26,0.75); backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,0.3); color: #fff; font-size: 20px;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none; z-index: 21;
+  transition: opacity .2s ease, transform .2s ease;
+}
+.tap-resume-hint span { padding-left: 3px; }
+.tap-resume-hint.show { opacity: 1; pointer-events: auto; transform: translate(-50%, -50%) scale(1); }
+
+/* ---------------- Jenerik: sifas tap pi gwo, pa gen hover-only enfo sou touch ---------------- */
+button { touch-action: manipulation; }

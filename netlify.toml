@@ -1,0 +1,26 @@
+# Konfigirasyon Netlify pou LMP Media Player (PWA).
+# "publish" rete rasin depo a (pa yon sou-dosye) paske manifest.json, sw.js
+# ak assets/ dwe sèvi soti nan rasin domèn nan (gade README-MOBIL.md).
+
+[build]
+  publish = "."
+
+# "/" rekri (rewrite, URL la pa chanje nan bar navigatè a) vè app la ki nan
+# src/index.html — konsa moun ka louvri jis "https://ou-domèn.netlify.app/"
+# san yo pa oblije konnen chemen "/src/index.html" la.
+[[redirects]]
+  from = "/"
+  to = "/src/index.html"
+  status = 200
+
+# Sw.js pa dwe janm rete an kach twò lontan sou navigatè a — nou kite Netlify
+# sèvi l ak yon Cache-Control kout pou chanjman yo parèt vit.
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "no-cache"
+
+[[headers]]
+  for = "/manifest.json"
+  [headers.values]
+    Content-Type = "application/manifest+json"

@@ -1,0 +1,3 @@
+#EXTM3U
+#EXTINF:-1 tvg-id="Le Maire TV" tvg-name="Le Maire TV" tvg-logo="https://raw.githubusercontent.com/Lemaire86/lemairetv/main/assets/logo.png" group-title="LMTV", Le Maire TV
+https://lmtv.lemairetv.uk/hls/stream.m3u8

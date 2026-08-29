@@ -1,0 +1,94 @@
+#EXTM3U
+#EXTINF:0,Trace Vanilla Islands (1080p)
+#EXTVLCOPT:network-caching=1000
+https://channels.trace.plus/Traceprod/VANILLA_hd/index.m3u8
+#EXTINF:0,Trace Urban Southern Africa (1080p)
+#EXTVLCOPT:network-caching=1000
+https://channels.trace.plus/Traceprod/URBAN_SA_hd/index.m3u8
+#EXTINF:0,Trace Urban International (1080p)
+#EXTVLCOPT:network-caching=1000
+https://channels.trace.plus/Traceprod/URBAN_INTER_hd/index.m3u8
+#EXTINF:0,Trace Urban France (1080p)
+#EXTVLCOPT:network-caching=1000
+https://channels.trace.plus/Traceprod/URBAN_FR_hd/index.m3u8
+#EXTINF:0,Trace Urban Caribbean and Indian Ocean (1080p)
+#EXTVLCOPT:network-caching=1000
+https://channels.trace.plus/Traceprod/URBAN_DOM_hd/index.m3u8
+#EXTINF:0,Trace Urban Africa Franco (1080p)
+#EXTVLCOPT:network-caching=1000
+https://channels.trace.plus/Traceprod/URBAN_AFRIC_FR_hd/index.m3u8
+#EXTINF:0,Trace Urban (Australia) (1080p)
+#EXTVLCOPT:network-caching=1000
+https://lightning-traceurban-samsungau.amagi.tv/playlist.m3u8
+#EXTINF:0,TRACE UK (1080p)
+#EXTVLCOPT:network-caching=1000
+https://amg01131-tracetv-amg01131c5-stirr-us-4389.playouts.now.amagi.tv/playlist.m3u8
+#EXTINF:0,Trace UK (1080p)
+#EXTVLCOPT:network-caching=1000
+https://channels.trace.plus/Traceprod/UK_FAST_hd/index.m3u8
+#EXTINF:0,Trace Toca (1080p)
+#EXTVLCOPT:network-caching=1000
+https://channels.trace.plus/Traceprod/TOCA_hd/index.m3u8
+#EXTINF:0,Trace Teranga (1080p)
+#EXTVLCOPT:network-caching=1000
+https://channels.trace.plus/Traceprod/TERANGA_hd/index.m3u8
+#EXTINF:0,Trace Sport Stars SD
+#EXTVLCOPT:network-caching=1000
+https://channels.trace.plus/Traceprod/TRACE_SPORT_STARS_sd/index.m3u8
+#EXTINF:0,Trace Sport Stars Russia (720p)
+#EXTVLCOPT:network-caching=1000
+https://stream8.cinerama.uz/1274/tracks-v1a1/mono.m3u8
+#EXTINF:0,Trace Sport Stars (Australia) (1080p)
+#EXTVLCOPT:network-caching=1000
+https://lightning-tracesport-samsungau.amagi.tv/playlist.m3u8
+#EXTINF:0,Trace Ngoma (1080p)
+#EXTVLCOPT:network-caching=1000
+https://channels.trace.plus/Traceprod/AFRICA_EN_hd/index.m3u8
+#EXTINF:0,Trace Naija (1080p)
+#EXTVLCOPT:network-caching=1000
+https://channels.trace.plus/Traceprod/NAIJA_hd/index.m3u8
+#EXTINF:0,Trace Mziki (1080p)
+#EXTVLCOPT:network-caching=1000
+https://channels.trace.plus/Traceprod/MZIKI_hd/index.m3u8
+#EXTINF:0,Trace Muzika (1080p)
+#EXTVLCOPT:network-caching=1000
+https://channels.trace.plus/Traceprod/MUZIKA_hd/index.m3u8
+#EXTINF:0,Trace Mboa (1080p)
+#EXTVLCOPT:network-caching=1000
+https://channels.trace.plus/Traceprod/MBOA_hd/index.m3u8
+#EXTINF:0,Trace Latina (1080p)
+#EXTVLCOPT:network-caching=1000
+https://channels.trace.plus/Traceprod/LATINA_hd/index.m3u8
+#EXTINF:0,Trace Kitoko (1080p)
+#EXTVLCOPT:network-caching=1000
+https://channels.trace.plus/Traceprod/KITOKO_hd/index.m3u8
+#EXTINF:0,Trace Jama (1080p)
+#EXTVLCOPT:network-caching=1000
+https://channels.trace.plus/Traceprod/JAMA_hd/index.m3u8
+#EXTINF:0,Trace Ivoire (1080p)
+#EXTVLCOPT:network-caching=1000
+https://channels.trace.plus/Traceprod/TRACE_IVOIRE_hd/index.m3u8
+#EXTINF:0,Trace Gospel Southern Africa (1080p)
+#EXTVLCOPT:network-caching=1000
+https://channels.trace.plus/Traceprod/GOSPEL_SA_hd/index.m3u8
+#EXTINF:0,Trace Gospel Nigeria and East Africa (1080p)
+#EXTVLCOPT:network-caching=1000
+https://channels.trace.plus/Traceprod/GOSPEL_ROA_hd/index.m3u8
+#EXTINF:0,Trace Gospel Africa Franco (1080p)
+#EXTVLCOPT:network-caching=1000
+https://channels.trace.plus/Traceprod/GOSPEL_FR_hd/index.m3u8
+#EXTINF:0,Trace Caribbean (1080p)
+#EXTVLCOPT:network-caching=1000
+https://channels.trace.plus/Traceprod/CARIBBEAN_hd/index.m3u8
+#EXTINF:0,TRACE Brazuca (1080p)
+#EXTVLCOPT:network-caching=1000
+https://amg01131-tracetv-amg01131c4-stirr-us-4390.playouts.now.amagi.tv/playlist.m3u8
+#EXTINF:0,Trace Brasil (1080p)
+#EXTVLCOPT:network-caching=1000
+https://cdn-uw2-prod.tsv2.amagi.tv/linear/amg01131-tracetv-tracebrazuca-samsungbr/playlist.m3u8
+#EXTINF:0,Trace Ayiti (1080p)
+#EXTVLCOPT:network-caching=1000
+https://channels.trace.plus/Traceprod/AYITI_hd/index.m3u8
+#EXTINF:0,Trace Africa (1080p)
+#EXTVLCOPT:network-caching=1000
+https://channels.trace.plus/Traceprod/AFRICA_FR_hd/index.m3u8

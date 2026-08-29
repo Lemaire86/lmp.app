@@ -1,0 +1,69 @@
+#EXTM3U
+#EXTINF:0, like Gecko) Chrome/149.0.0.0 Safari/537.3" group-title="Kids" - Disney Channel
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.3
+#EXTVLCOPT:network-caching=1000
+http://213.91.179.28:8000/play/a059
+#EXTINF:0, like Gecko) Chrome/130.0.0.0 Safari/537.36" group-title="Kids" - Disney Channel
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36
+#EXTVLCOPT:network-caching=1000
+http://88.212.15.19/live/disney_channel_hun/index.m3u8
+#EXTINF:0, like Gecko) Chrome/149.0.0.0 Safari/537.3" group-title="Kids" - Disney Channel
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.3
+#EXTVLCOPT:network-caching=1000
+http://86.87.15.10:8004/play/a02g/index.m3u8
+#EXTINF:0, like Gecko) Chrome/149.0.0.0 Safari/537.3" group-title="Kids" - Gulli
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.3
+#EXTVLCOPT:network-caching=1000
+http://99.27.51.147:8080/Gulli/index.m3u8
+#EXTINF:0, like Gecko) Chrome/130.0.0.0 Safari/537.36" group-title="Kids" - KinoKazka (1080p)
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36
+#EXTVLCOPT:network-caching=1000
+http://stream.mcquack.net/167/index.m3u8
+#EXTINF:0, like Gecko) Chrome/120.0.0.0 Safari/537.36" group-title="Kids" - Kolyokklub
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36
+#EXTVLCOPT:network-caching=1000
+http://88.212.15.19/live/kolyokklub_atk/index.m3u8
+#EXTINF:0, like Gecko) Chrome/120.0.0.0 Safari/537.36" group-title="Kids" - Minimax
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36
+#EXTVLCOPT:network-caching=1000
+http://88.212.15.19/live/minimax_hun/index.m3u8
+#EXTINF:0, like Gecko) Chrome/120.0.0.0 Safari/537.36" group-title="Kids" - Nick Jr.
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36
+#EXTVLCOPT:network-caching=1000
+http://88.212.15.19/live/nick_junior_hun/index.m3u8
+#EXTINF:0, like Gecko) Chrome/149.0.0.0 Safari/537.3" group-title="Kids" - Nickelodeon
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.3
+#EXTVLCOPT:network-caching=1000
+http://213.91.179.28:8000/play/a056
+#EXTINF:0, like Gecko) Chrome/120.0.0.0 Safari/537.36" group-title="Kids" - Nickelodeon
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36
+#EXTVLCOPT:network-caching=1000
+http://88.212.15.19/live/test_nickelodeon_hevc_25p/playlist.m3u8
+#EXTINF:0, like Gecko) Chrome/130.0.0.0 Safari/537.36" group-title="Kids" - Nickelodeon
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36
+#EXTVLCOPT:network-caching=1000
+http://88.212.15.19/live/test_nickelodeon_hu_1200_atk/playlist.m3u8
+#EXTINF:0, like Gecko) Chrome/120.0.0.0 Safari/537.36" group-title="Kids" - Nicktoons
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36
+#EXTVLCOPT:network-caching=1000
+http://88.212.15.19/live/nicktoons_hungary/index.m3u8
+#EXTINF:0, like Gecko) Chrome/130.0.0.0 Safari/537.36" group-title="Kids" - PLUSPLUS (1080p)
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36
+#EXTVLCOPT:network-caching=1000
+http://stream.mcquack.net/339/index.m3u8
+#EXTINF:0, like Gecko) Chrome/149.0.0.0 Safari/537.36" group-title="Kids" - Rai Yoyo
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36
+#EXTVLCOPT:network-caching=1000
+http://91.146.94.234:10001/play/a039
+#EXTINF:0, like Gecko) Chrome/149.0.0.0 Safari/537.3" group-title="Kids" - RING
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.3
+#EXTVLCOPT:network-caching=1000
+http://213.91.179.28:8000/play/a06e
+#EXTINF:0, like Gecko) Chrome/130.0.0.0 Safari/537.36" group-title="Kids" - TV2 Kids
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36
+#EXTVLCOPT:network-caching=1000
+http://88.212.15.19/live/tv2_kids/index.m3u8
+#EXTINF:0, like Gecko) Chrome/149.0.0.0 Safari/537.36" group-title="Kids" - Zoom (576p)
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36
+#EXTVLCOPT:network-caching=1000
+http://stream.mcquack.net/377/index.m3u8

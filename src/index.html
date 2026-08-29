@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover" />
+<meta name="theme-color" content="#060a14" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="LMP Player" />
+<link rel="manifest" href="../manifest.json" />
+<link rel="apple-touch-icon" href="../assets/icon.png" />
+<link rel="icon" href="../assets/icon.png" />
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' file: data: blob: https: http:; script-src 'self' 'unsafe-inline' file:; style-src 'self' 'unsafe-inline';" />
+<title>LMP Media Player — LE MAIRE Media Player</title>
+<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="mobile.css" />
+</head>
+<body>
+
+  <!-- Custom titlebar -->
+  <div class="titlebar" id="titlebar">
+    <div class="titlebar-drag" id="titlebar-brand" role="button" tabindex="0" title="Louvri meni an" aria-label="Louvri meni an">
+      <img class="brand-icon" src="../assets/logo.png" alt="LMP" />
+      <span class="brand-text">LE MAIRE <b>Media Player</b></span>
+    </div>
+    <div class="titlebar-search">
+      <div class="search-box" id="search-box">
+        <svg viewBox="0 0 24 24" class="search-ic"><circle cx="11" cy="11" r="7" fill="none" stroke-width="1.8"/><line x1="21" y1="21" x2="16.5" y2="16.5" stroke-width="1.8"/></svg>
+        <input type="text" id="search-input" placeholder="Chèche nenpòt bagay…" />
+      </div>
+    </div>
+    <div class="titlebar-controls">
+      <button class="win-btn" id="btn-notifications" title="Notifikasyon">
+        <svg viewBox="0 0 24 24"><path d="M12 3a5 5 0 0 0-5 5v3.2c0 .6-.2 1.1-.6 1.6L5 15h14l-1.4-2.2c-.4-.5-.6-1-.6-1.6V8a5 5 0 0 0-5-5z" fill="none" stroke-width="1.5"/><path d="M9.5 18a2.5 2.5 0 0 0 5 0" fill="none" stroke-width="1.5"/></svg>
+      </button>
+      <button id="btn-min" class="win-btn" title="Diminye"><svg viewBox="0 0 10 10"><rect x="0" y="4.5" width="10" height="1.2"/></svg></button>
+      <button id="btn-max" class="win-btn" title="Agrandi"><svg viewBox="0 0 10 10"><rect x="0.5" y="0.5" width="9" height="9" fill="none" stroke-width="1.1"/></svg></button>
+      <button id="btn-close" class="win-btn win-btn-close" title="Fèmen"><svg viewBox="0 0 10 10"><line x1="0.5" y1="0.5" x2="9.5" y2="9.5" stroke-width="1.2"/><line x1="9.5" y1="0.5" x2="0.5" y2="9.5" stroke-width="1.2"/></svg></button>
+    </div>
+  </div>
+
+  <div class="app-shell">
+
+    <!-- =============== Left nav rail =============== -->
+    <nav class="nav-rail" id="nav-rail">
+      <div class="nav-brand-block">
+        <img src="../assets/logo.png" class="nav-brand-logo" alt="LMP" />
+        <div class="nav-brand-text">LE MAIRE Media Player</div>
+        <button class="ctl-btn nav-overlay-close" id="btn-nav-close" title="Fèmen meni">✕</button>
+      </div>
+      <div class="nav-list">
+        <button class="nav-item active" data-section="home">
+          <span class="nav-ic">🏠</span>
+          <span class="nav-labels"><span class="nav-title">Home</span><span class="nav-sub">Dashboard</span></span>
+        </button>
+        <button class="nav-item" data-section="livetv">
+          <span class="nav-ic">📡</span>
+          <span class="nav-labels"><span class="nav-title">Live TV</span><span class="nav-sub">Watch Live Channels</span></span>
+        </button>
+        <button class="nav-item" data-section="local">
+          <span class="nav-ic">💾</span>
+          <span class="nav-labels"><span class="nav-title">Local Media</span><span class="nav-sub">Play Your Files</span></span>
+        </button>
+        <button class="nav-item" data-section="radio">
+          <span class="nav-ic">🎵</span>
+          <span class="nav-labels"><span class="nav-title">Radio</span><span class="nav-sub">Listen to Stations</span></span>
+        </button>
+        <button class="nav-item" data-section="favorites">
+          <span class="nav-ic">⭐</span>
+          <span class="nav-labels"><span class="nav-title">Favorites</span><span class="nav-sub">Your Favorite List</span></span>
+        </button>
+        <button class="nav-item" data-section="history">
+          <span class="nav-ic">🕒</span>
+          <span class="nav-labels"><span class="nav-title">History</span><span class="nav-sub">Recently Played</span></span>
+        </button>
+        <button class="nav-item" data-section="playlists">
+          <span class="nav-ic">📋</span>
+          <span class="nav-labels"><span class="nav-title">Playlists</span><span class="nav-sub">Manage Playlists</span></span>
+        </button>
+        <button class="nav-item" id="nav-settings" data-section="settings">
+          <span class="nav-ic">⚙️</span>
+          <span class="nav-labels"><span class="nav-title">Settings</span><span class="nav-sub">Customize Player</span></span>
+        </button>
+      </div>
+
+      <div class="nav-footer-card">
+        <div class="nav-footer-line brand-line">LMP PLAYER <span id="nav-version">v1.0</span></div>
+        <div class="nav-footer-line"><span class="status-dot" id="status-dot"></span><span id="status-text">Connected</span></div>
+        <div class="nav-footer-line">Hardware Acceleration: <b id="hwaccel-state">ON</b></div>
+        <div class="nav-footer-line">Engine: <b id="engine-state">Auto (HLS.js)</b></div>
+      </div>
+      <div class="nav-social-row">
+        <a href="#" class="nav-social-ic" data-social="twitter">𝕏</a>
+        <a href="#" class="nav-social-ic" data-social="facebook">f</a>
+        <a href="#" class="nav-social-ic" data-social="instagram">◎</a>
+        <a href="#" class="nav-social-ic" data-social="web">🌐</a>
+        <button class="nav-collapse-btn" id="btn-nav-collapse" title="Kache/Montre meni">«</button>
+      </div>
+    </nav>
+
+    <!-- =============== Library / content panel =============== -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-actions">
+        <div class="sidebar-add-actions" id="sidebar-add-actions">
+          <div class="sidebar-add-row">
+            <button class="pill-btn" id="btn-add-files" title="Louvri fichye">＋ Fichye</button>
+            <button class="pill-btn" id="btn-add-folder" title="Louvri dosye">📁 Dosye</button>
+          </div>
+          <button class="pill-btn" id="btn-add-url" title="Louvri lyen/stream">🔗 URL</button>
+        </div>
+        <div class="sidebar-close-row">
+          <button class="ctl-btn nav-overlay-close" id="btn-sidebar-back" title="Tounen" style="display:none">←</button>
+          <button class="ctl-btn nav-overlay-close" id="btn-sidebar-close" title="Fèmen lis la">✕</button>
+        </div>
+      </div>
+
+      <div class="section-header" id="section-header">
+        <h2 id="section-title">Home</h2>
+        <div class="section-actions" id="section-actions"></div>
+      </div>
+
+      <div class="sidebar-scroll" id="sidebar-scroll">
+        <div class="category-chips" id="category-chips" style="display:none"></div>
+
+        <div class="resume-banner" id="resume-banner" style="display:none">
+          <div class="resume-info">
+            <div class="resume-label">Kontinye gade</div>
+            <div class="resume-name" id="resume-name">—</div>
+          </div>
+          <button class="pill-btn pill-sm" id="btn-resume-play">▶ Kontinye</button>
+        </div>
+
+        <div class="playlist-scroll" id="playlist">
+          <div class="playlist-empty" id="playlist-empty">
+            Lis ou vid. Klike <b>＋ Fichye</b>, <b>📁 Dosye</b>, oswa <b>🔗 URL</b> pou kòmanse.
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-footer">
+        <span id="track-count">0 fichye</span>
+        <span id="repeat-shuffle-status"></span>
+      </div>
+    </aside>
+
+    <!-- =============== Main stage =============== -->
+    <main class="stage">
+     <div class="fullscreen-target" id="fullscreen-target">
+
+      <!-- Video header row -->
+      <div class="video-header" id="video-header">
+        <div class="vh-titles">
+          <div class="vh-section-label" id="vh-section-label">LIVE TV</div>
+          <div class="vh-title-row">
+            <span class="vh-title" id="vh-title">Le Maire TV</span>
+            <span class="vh-live-badge" id="vh-live-badge" style="display:none">LIVE</span>
+          </div>
+        </div>
+        <div class="vh-actions">
+          <button class="ctl-btn" id="btn-vh-menu" title="Meni"><svg viewBox="0 0 24 24"><line x1="4" y1="7" x2="20" y2="7" stroke-width="1.8"/><line x1="4" y1="12" x2="20" y2="12" stroke-width="1.8"/><line x1="4" y1="17" x2="14" y2="17" stroke-width="1.8"/></svg></button>
+          <button class="ctl-btn" id="btn-toggle-sidebar" title="Kache/Montre lis">
+            <svg viewBox="0 0 24 24"><rect x="3" y="4" width="7" height="16" rx="1.2" fill="none" stroke-width="1.6"/><rect x="12" y="4" width="9" height="16" rx="1.2" fill="none" stroke-width="1.6"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="stage-media" id="stage-media">
+        <video id="video-el" playsinline class="mode-fit"></video>
+
+        <div class="audio-visual" id="audio-visual">
+          <div class="disc-wrap">
+            <div class="disc-glow"></div>
+            <div class="disc" id="disc">
+              <img src="../assets/logo.png" class="disc-logo" alt="" />
+            </div>
+          </div>
+          <canvas id="viz-canvas" width="900" height="140"></canvas>
+        </div>
+
+        <div class="stage-empty" id="stage-empty">
+          <img src="../assets/logo.png" class="empty-logo" alt="LMP" />
+          <h1>LMP <span>Media Player</span></h1>
+          <p class="brand-subline">LE MAIRE Media Player</p>
+          <p>Tout fòma videyo &amp; odyo. M3U · M3U8 · MPD · HLS/DASH · Stream lokal ak online.</p>
+          <div class="empty-actions">
+            <button class="pill-btn" id="btn-empty-add-files">＋ Ouvri fichye</button>
+            <button class="ghost-btn" id="btn-empty-add-url">🔗 Ouvri stream</button>
+          </div>
+        </div>
+
+        <button class="exit-fs-btn" id="btn-exit-fs" title="Sòti nan plen ekran (Echap)">✕</button>
+        <div class="fs-hint" id="fs-hint">Peze <kbd>Echap</kbd> oswa doub-klike pou sòti nan plen ekran</div>
+        <div class="toast" id="toast"></div>
+      </div>
+
+      <!-- Info row: Now Playing card + Stream Info -->
+      <div class="info-row" id="info-row">
+        <div class="now-playing-card">
+          <div class="npc-top">
+            <div class="npc-logo" id="npc-logo">📡</div>
+            <div class="npc-text">
+              <div class="npc-name-row">
+                <span class="np-title" id="np-title">Pa gen fichye k ap jwe</span>
+                <span class="vh-live-badge" id="npc-live-badge" style="display:none">LIVE</span>
+              </div>
+              <div class="np-sub" id="np-sub">—</div>
+            </div>
+            <div class="np-badges">
+              <button class="badge badge-btn" id="btn-favorite-current" title="Favori">☆</button>
+              <span class="badge" id="badge-format">—</span>
+            </div>
+          </div>
+          <div class="npc-bottom">
+            <div class="npc-col">
+              <div class="npc-col-label">K ap Jwe Kounye a</div>
+              <div class="npc-col-value" id="npc-now-value">—</div>
+            </div>
+            <div class="npc-col">
+              <div class="npc-col-label">Apre nan Lis la</div>
+              <div class="npc-col-value" id="npc-next-value">—</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="stream-info-card">
+          <div class="si-title">Stream Information</div>
+          <div class="si-grid">
+            <div class="si-item"><span class="si-label">Resolution</span><span class="si-value" id="si-resolution">—</span></div>
+            <div class="si-item"><span class="si-label">Codec</span><span class="si-value" id="si-codec">—</span></div>
+            <div class="si-item"><span class="si-label">FPS</span><span class="si-value" id="si-fps">—</span></div>
+            <div class="si-item"><span class="si-label">Bitrate</span><span class="si-value" id="si-bitrate">—</span></div>
+            <div class="si-item"><span class="si-label">Connection</span><span class="si-value" id="si-connection">—</span></div>
+            <div class="si-item"><span class="si-label">Buffer</span><span class="si-value" id="si-buffer">—</span></div>
+            <div class="si-item"><span class="si-label">Speed</span><span class="si-value" id="si-speed">—</span></div>
+            <div class="si-item"><span class="si-label">Network</span><span class="si-value" id="si-network">—</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action toolbar -->
+      <div class="action-toolbar" id="action-toolbar">
+        <button class="action-btn" id="btn-screenshot"><span class="action-ic">📷</span><span class="action-labels"><span class="action-title">Screenshot</span><span class="action-sub">Capture Frame</span></span></button>
+        <button class="action-btn" id="btn-record"><span class="action-ic action-ic-rec">●</span><span class="action-labels"><span class="action-title" id="record-title">Record</span><span class="action-sub" id="record-sub">Start Recording</span></span></button>
+        <button class="action-btn" id="btn-view-toggle" title="Elaji ekran an — kache/montre enfo yo"><span class="action-ic">👁</span><span class="action-labels"><span class="action-title" id="view-toggle-title">View</span><span class="action-sub" id="view-toggle-sub">Elaji Ekran</span></span></button>
+        <button class="action-btn" id="btn-player-settings"><span class="action-ic">⚙️</span><span class="action-labels"><span class="action-title">Player Settings</span><span class="action-sub">Customize Player</span></span></button>
+      </div>
+
+      <!-- Transport -->
+      <div class="transport">
+        <div class="seek-row">
+          <span class="time" id="time-current">00:00</span>
+          <input type="range" id="seek-bar" min="0" max="1000" value="0" step="1" />
+          <span class="time" id="time-duration">00:00</span>
+          <span class="live-dot" id="live-dot" style="display:none">● LIVE</span>
+        </div>
+
+        <div class="controls-row">
+          <div class="controls-left">
+            <button class="ctl-btn" id="btn-shuffle" title="Mize (shuffle) — S">
+              <svg viewBox="0 0 24 24"><path d="M2 6h3.5c1.4 0 2.6.7 3.3 1.9M22 18h-3.5c-1.4 0-2.6-.7-3.3-1.9M2 18h3.5c1.4 0 2.6-.7 3.3-1.9l6.4-8.2c.7-1.2 1.9-1.9 3.3-1.9H22M18 4l4 2-4 2M18 16l4 2-4 2"/></svg>
+            </button>
+            <button class="ctl-btn" id="btn-repeat" title="Repete — R">
+              <svg viewBox="0 0 24 24"><path d="M17 2l4 4-4 4M3 11V9a4 4 0 0 1 4-4h14M7 22l-4-4 4-4M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+              <span class="repeat-one-dot" id="repeat-one-dot"></span>
+            </button>
+            <button class="ctl-btn" id="btn-skip-back" title="Reyale 10s">
+              <svg viewBox="0 0 24 24"><path d="M12 5V2L7 6l5 4V7a5 5 0 1 1-5 5H5a7 7 0 1 0 7-7z"/></svg>
+            </button>
+          </div>
+
+          <div class="controls-center">
+            <button class="ctl-btn ctl-med" id="btn-prev" title="Anvan — P">
+              <svg viewBox="0 0 24 24"><path d="M6 5v14M20 5L9 12l11 7V5z"/></svg>
+            </button>
+            <button class="play-btn" id="btn-play" title="Jwe / Poz — Espas">
+              <svg id="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l12-7z"/></svg>
+              <svg id="icon-pause" viewBox="0 0 24 24" style="display:none"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>
+            </button>
+            <button class="ctl-btn ctl-med" id="btn-stop" title="Sispann">
+              <svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12"/></svg>
+            </button>
+            <button class="ctl-btn ctl-med" id="btn-next" title="Apre — N">
+              <svg viewBox="0 0 24 24"><path d="M18 5v14M4 5l11 7-11 7V5z"/></svg>
+            </button>
+          </div>
+
+          <div class="controls-right">
+            <button class="ctl-btn" id="btn-skip-fwd" title="Avanse 10s">
+              <svg viewBox="0 0 24 24"><path d="M12 5V2l5 4-5 4V7a5 5 0 1 0 5 5h2a7 7 0 1 1-7-7z"/></svg>
+            </button>
+            <button class="ctl-btn" id="btn-subtitle" title="Ajoute soutit (.srt/.vtt)">
+              <svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2" fill="none" stroke-width="1.6"/><line x1="5" y1="10" x2="11" y2="10" stroke-width="1.6"/><line x1="5" y1="14" x2="15" y2="14" stroke-width="1.6"/></svg>
+            </button>
+            <button class="ctl-btn" id="btn-speed" title="Vitès jwe">1x</button>
+            <div class="volume-wrap">
+              <button class="ctl-btn" id="btn-mute" title="Mize son — M">
+                <svg id="icon-vol" viewBox="0 0 24 24"><path d="M4 9v6h4l5 5V4L8 9H4z"/><path d="M16 8a5 5 0 0 1 0 8M18.5 5.5a9 9 0 0 1 0 13"/></svg>
+                <svg id="icon-mute" viewBox="0 0 24 24" style="display:none"><path d="M4 9v6h4l5 5V4L8 9H4z"/><line x1="16" y1="9" x2="22" y2="15" stroke-width="1.8"/><line x1="22" y1="9" x2="16" y2="15" stroke-width="1.8"/></svg>
+              </button>
+              <input type="range" id="volume-bar" min="0" max="100" value="80" />
+            </div>
+            <button class="ctl-btn" id="btn-display-mode" title="Mòd ekran videyo — A">
+              <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="1.5" fill="none" stroke-width="1.6"/><path d="M8 9h8v6H8z" fill="none" stroke-width="1.4"/></svg>
+            </button>
+            <button class="ctl-btn" id="btn-fullscreen" title="Plen ekran — F (oswa doub-klik sou ekran an)">
+              <svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M8 21H5a2 2 0 0 1-2-2v-3M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
+            </button>
+            <button class="ctl-btn" id="btn-mini-player" title="Mini Player">
+              <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="1.5" fill="none" stroke-width="1.6"/><rect x="12" y="12" width="8" height="6" rx="1" fill="currentColor" stroke="none"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+     </div>
+    </main>
+
+    <!-- =============== Menu overlay scrim (Nav rail + Sidebar) =============== -->
+    <!-- Rete ANNDAN .app-shell (pa deyò l): lè nou an fullscreen sou .app-shell,
+         sèl sa ki anndan l ka parèt/reponn a klik pa-dèsi videyo a. -->
+    <div class="nav-scrim" id="nav-scrim"></div>
+  </div>
+
+  <!-- =============== Settings slide-in glass panel =============== -->
+  <div class="settings-scrim" id="settings-scrim"></div>
+  <div class="settings-panel glass-panel" id="settings-panel">
+    <div class="settings-head">
+      <h2>SETTINGS</h2>
+      <button class="ctl-btn" id="settings-close">✕</button>
+    </div>
+    <div class="settings-body">
+      <div class="settings-cats" id="settings-cats">
+        <button class="cat-btn active" data-cat="playback">Playback</button>
+        <button class="cat-btn" data-cat="video">Video</button>
+        <button class="cat-btn" data-cat="audio">Audio</button>
+        <button class="cat-btn" data-cat="streaming">Streaming</button>
+        <button class="cat-btn" data-cat="subtitles">Subtitles</button>
+        <button class="cat-btn" data-cat="interface">Interface</button>
+        <button class="cat-btn" data-cat="shortcuts">Shortcuts</button>
+        <button class="cat-btn" data-cat="playlist">Playlist</button>
+        <button class="cat-btn" data-cat="advanced">Advanced</button>
+      </div>
+      <div class="settings-detail" id="settings-detail"><!-- filled by JS --></div>
+    </div>
+    <div class="settings-footer">
+      <button class="ghost-btn" id="btn-settings-reset">Reset to Default</button>
+      <button class="pill-btn" id="btn-settings-save">Save Changes</button>
+    </div>
+  </div>
+
+  <!-- URL / stream modal -->
+  <div class="modal-overlay" id="url-modal">
+    <div class="modal glass-panel">
+      <h3>Ouvri yon lyen oswa stream</h3>
+      <p class="modal-hint">Kole yon lyen medya dirèk (mp4, mp3…), yon lyen HLS (.m3u8) oswa DASH (.mpd), oswa yon lyen playlist (.m3u).</p>
+      <input type="text" id="url-input" placeholder="https://exemple.com/stream.m3u8" />
+      <div class="modal-actions">
+        <button class="ghost-btn" id="url-cancel">Anile</button>
+        <button class="pill-btn" id="url-confirm">Ouvri</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../assets/vendor/hls.min.js"></script>
+  <script src="../assets/vendor/dash.all.min.js"></script>
+  <script src="mobile-shim.js"></script>
+  <script src="renderer.js"></script>
+  <script src="mobile-enhancements.js"></script>
+  <script>
+    /* ⚠️ Rejistre + FORSE verifye si gen yon nouvo vèsyon service worker la
+       (sw.js) chak fwa app la louvri, e otomatikman rechaje paj la YON SÈL
+       fwa lè yon nouvo vèsyon pran kontwòl — konsa itilizatè a pa janm
+       bezwen fè "hard refresh" manyèlman ankò pou l wè dènye chanjman yo. */
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('../sw.js').then((reg) => {
+          reg.update().catch(() => {});
+        }).catch(() => {});
+      });
+      let swReloaded = false;
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (swReloaded) return;
+        swReloaded = true;
+        window.location.reload();
+      });
+    }
+  </script>
+</body>
+</html>

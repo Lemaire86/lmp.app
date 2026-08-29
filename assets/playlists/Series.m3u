@@ -1,0 +1,41 @@
+#EXTM3U
+#EXTINF:0, like Gecko) Chrome/124.0.0.0 Safari/537.36" group-title="Series" - Epic Drama
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36
+#EXTVLCOPT:network-caching=1000
+http://82.78.243.219:45739/play/a01p/index.m3u8
+#EXTINF:0, like Gecko) Chrome/149.0.0.0 Safari/537.36" group-title="Series" - HOT Drama (1080p)
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36
+#EXTVLCOPT:network-caching=1000
+http://stream.mcquack.net/381/index.m3u8
+#EXTINF:0, like Gecko) Chrome/149.0.0.0 Safari/537.3" group-title="Series" - Star Crime
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.3
+#EXTVLCOPT:network-caching=1000
+http://213.91.179.28:8000/play/a0cs
+#EXTINF:0, like Gecko) Chrome/149.0.0.0 Safari/537.3" group-title="Series" - Star Crime
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.3
+#EXTVLCOPT:network-caching=1000
+http://92.36.202.5:10001/play/a02o
+#EXTINF:0, like Gecko) Chrome/149.0.0.0 Safari/537.3" group-title="Series" - Star Life
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.3
+#EXTVLCOPT:network-caching=1000
+http://213.91.179.28:8000/play/a0cr
+#EXTINF:0, like Gecko) Chrome/149.0.0.0 Safari/537.3" group-title="Series" - Star Life
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.3
+#EXTVLCOPT:network-caching=1000
+http://92.36.202.5:10001/play/a02n
+#EXTINF:0, like Gecko) Chrome/149.0.0.0 Safari/537.36" group-title="Series" - Top Crime
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36
+#EXTVLCOPT:network-caching=1000
+http://91.146.94.234:10001/play/a03o
+#EXTINF:0, like Gecko) Chrome/149.0.0.0 Safari/537.36" group-title="Series" - Tviy serial (1080p)
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36
+#EXTVLCOPT:network-caching=1000
+http://stream.mcquack.net/466/index.m3u8
+#EXTINF:0, like Gecko) Chrome/149.0.0.0 Safari/537.3" group-title="Series" - TVRUS+
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.3
+#EXTVLCOPT:network-caching=1000
+http://83.228.75.166:8000/play/a0aq
+#EXTINF:0, like Gecko) Chrome/124.0.0.0 Safari/537.36" group-title="Series" - Universal Crime (1080p)
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36
+#EXTVLCOPT:network-caching=1000
+http://bantel-cdn1.iptvperu.tv:1935/btnscrtn/universalcrime/playlist.m3u8
