@@ -5,7 +5,7 @@
    Li PA janm entèsepte stream videyo/odyo (m3u8, mpd, segman
    .ts/.mp4, elt.) — sa ta ka kraze lekti anliy/live la.
    ============================================================== */
-const CACHE_NAME = 'lmp-mobile-shell-v6';
+const CACHE_NAME = 'lmp-mobile-shell-v8';
 const SHELL_FILES = [
   './src/index.html',
   './src/styles.css',

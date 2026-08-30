@@ -17,6 +17,19 @@
 (function () {
   'use strict';
 
+  // Menm règ ekran ki nan src/index.html pou mobile.css (media="(max-width:
+  // 900px), (pointer: coarse)"). Fichye sa a te fèt SÈLMAN pou vèsyon
+  // mobil la (gade kòmantè an wo a) men anvan, li te toujou egzekite —
+  // menm sou yon gwo ekran òdinatè/ultrawide — e li te DEPLASE bouton yo
+  // (Player Settings/Record/Screenshot/flèch) nan DOM la pou yo antre nan
+  // .mobile-inline-ctl (ti bouton won 38x38), kèlkeswa gwosè ekran an. Se
+  // sa ki te fè bouton yo "chanje style" san rapò ak ki ekran app la
+  // louvri: yo te toujou deplase/rapetisi, menm lè mobile.css pa t aplike.
+  // Kounye a, si sa pa yon aparèy mobil/tach, script la sispann la e li
+  // pa touche DOM/estil bouton yo ditou.
+  var MOBILE_UI_QUERY = '(max-width: 900px), (pointer: coarse)';
+  if (!window.matchMedia || !window.matchMedia(MOBILE_UI_QUERY).matches) return;
+
   var stage = document.getElementById('stage-media');
   var video = document.getElementById('video-el');
   var volumeBarEl = document.getElementById('volume-bar');

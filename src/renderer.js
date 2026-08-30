@@ -170,6 +170,11 @@ const btnFullscreen = document.getElementById('btn-fullscreen');
 const btnToggleSidebar = document.getElementById('btn-toggle-sidebar');
 const btnMiniPlayer = document.getElementById('btn-mini-player');
 const btnDisplayMode = document.getElementById('btn-display-mode');
+const btnQuality = document.getElementById('btn-quality');
+const qualityPanel = document.getElementById('quality-panel');
+const qualityScrim = document.getElementById('quality-scrim');
+const qualityList = document.getElementById('quality-list');
+const qualityClose = document.getElementById('quality-close');
 
 // New UI refs (nav rail, video header, now-playing card, stream info, action toolbar)
 const btnNavCollapse = document.getElementById('btn-nav-collapse');
@@ -934,6 +939,8 @@ function destroyEngines() {
   if (dashInstance) { dashInstance.reset(); dashInstance = null; }
   clearTimeout(reconnectTimer);
   reconnectAttemptCount = 0;
+  currentQualityKind = null;
+  closeQualityPanel();
 }
 
 function stopPlayback() {
@@ -1044,10 +1051,13 @@ function loadTrackIntoPlayer(track) {
       hlsInstance.loadSource(track.url);
       hlsInstance.attachMedia(mediaEl);
       hlsInstance.on(window.Hls.Events.MANIFEST_PARSED, () => {
-        populateQualityFromHls();
+        currentQualityKind = 'hls';
+        applyDefaultQualityForNewStream();
+        refreshQualityListIfOpen();
         mediaEl.play().catch(() => {});
         logEvent('HLS', 'Manifest chaje pou ' + track.name);
       });
+      hlsInstance.on(window.Hls.Events.LEVEL_SWITCHED, () => { refreshQualityListIfOpen(); });
       hlsInstance.on(window.Hls.Events.FRAG_BUFFERED, () => { reconnectAttemptCount = 0; });
       hlsInstance.on(window.Hls.Events.ERROR, (evt, data) => {
         logEvent('HLS', (data.fatal ? 'ERÈ FATAL: ' : 'erè: ') + data.type + ' ' + (data.details || ''));
@@ -1069,7 +1079,12 @@ function loadTrackIntoPlayer(track) {
       } catch (e) { /* ignore config errors on older dashjs */ }
       dashInstance.initialize(mediaEl, track.url, true);
       dashInstance.on('error', (e) => { logEvent('DASH', 'erè: ' + JSON.stringify(e).slice(0, 200)); attemptReconnect(); });
-      dashInstance.on('streamInitialized', () => populateQualityFromDash());
+      dashInstance.on('streamInitialized', () => {
+        currentQualityKind = 'dash';
+        applyDefaultQualityForNewStream();
+        refreshQualityListIfOpen();
+      });
+      dashInstance.on('qualityChangeRendered', () => refreshQualityListIfOpen());
       logEvent('DASH', 'Chaje manifest MPD pou ' + track.name);
     } else {
       showToast('Pa gen sipò DASH disponib.');
@@ -1538,36 +1553,122 @@ function stopViz() {
   vizCtx.clearRect(0, 0, vizCanvas.width, vizCanvas.height);
 }
 
-/* ============================== Quality (HLS/DASH) ============================== */
-function populateQualityFromHls() {
-  const select = document.getElementById('qs-quality');
-  if (!select || !hlsInstance) return;
-  select.innerHTML = '<option value="auto">Auto</option>';
-  hlsInstance.levels.forEach((lvl, i) => {
-    const opt = document.createElement('option');
-    opt.value = i;
-    opt.textContent = `${lvl.height ? lvl.height + 'p' : ''} ${Math.round(lvl.bitrate / 1000)}kbps`.trim();
-    select.appendChild(opt);
+/* ============================== Quality (HLS/DASH) ==============================
+   Meni "Kalite" a (tankou YouTube): bouton #btn-quality louvri #quality-panel,
+   li ranpli ak nivo HLS/DASH stream aktyèl la, ki gen ladan yon opsyon "Auto"
+   ki kite motè a (hls.js/dash.js) chwazi pi bon rezolisyon an TOUT SÈL li,
+   an fonksyon vitès/kondisyon entènèt ou an — egzakteman jan YouTube fè l.
+   "Default Quality" nan Settings → Playback (auto/pi wo a/pi ba a) aplike
+   yon sèl fwa lè yon nouvo stream kòmanse (gade applyDefaultQualityForNewStream). */
+let currentQualityKind = null; // 'hls' | 'dash' | null
+function qualityLabelFor(height) {
+  if (!height) return { text: 'Kalite pa konnen', badge: '' };
+  if (height >= 2160) return { text: height + 'p', badge: '4K' };
+  if (height >= 1080) return { text: height + 'p', badge: 'HD' };
+  if (height >= 720) return { text: height + 'p', badge: 'HD' };
+  return { text: height + 'p', badge: '' };
+}
+function renderQualityList(levels, activeIdx, isAuto, autoActualHeight, onPick) {
+  if (!qualityList) return;
+  qualityList.innerHTML = '';
+  const autoBtn = document.createElement('button');
+  autoBtn.className = 'quality-item' + (isAuto ? ' active' : '');
+  autoBtn.innerHTML = 'Auto' + (isAuto && autoActualHeight ? `<span class="quality-auto-current">(${autoActualHeight}p)</span>` : '');
+  autoBtn.onclick = () => { onPick(-1); closeQualityPanel(); };
+  qualityList.appendChild(autoBtn);
+
+  levels.forEach((lvl, i) => {
+    const { text, badge } = qualityLabelFor(lvl.height);
+    const btn = document.createElement('button');
+    btn.className = 'quality-item' + (!isAuto && i === activeIdx ? ' active' : '');
+    btn.innerHTML = text + (badge ? `<span class="quality-badge">${badge}</span>` : '');
+    btn.onclick = () => { onPick(i); closeQualityPanel(); };
+    qualityList.appendChild(btn);
   });
-  select.onchange = () => { hlsInstance.currentLevel = select.value === 'auto' ? -1 : Number(select.value); };
+}
+function sortedHlsLevelIndexes() {
+  // hls.js levels pa toujou vini tou triye — nou triye pa wotè (height) pou
+  // "Default Quality: Pi wo a / Pi ba a" toujou jwenn bon nivo a.
+  return hlsInstance.levels.map((l, i) => i).sort((a, b) => (hlsInstance.levels[a].height || 0) - (hlsInstance.levels[b].height || 0));
+}
+function populateQualityFromHls() {
+  if (!qualityList || !hlsInstance) return;
+  currentQualityKind = 'hls';
+  const isAuto = hlsInstance.currentLevel === -1;
+  const activeHeight = hlsInstance.levels[hlsInstance.currentLevel] ? hlsInstance.levels[hlsInstance.currentLevel].height : null;
+  renderQualityList(hlsInstance.levels, hlsInstance.currentLevel, isAuto, activeHeight, (i) => {
+    hlsInstance.currentLevel = i;
+  });
 }
 function populateQualityFromDash() {
-  const select = document.getElementById('qs-quality');
-  if (!select || !dashInstance) return;
-  select.innerHTML = '<option value="auto">Auto</option>';
+  if (!qualityList || !dashInstance) return;
+  currentQualityKind = 'dash';
   try {
     const list = dashInstance.getBitrateInfoListFor('video') || [];
-    list.forEach((b, i) => {
-      const opt = document.createElement('option');
-      opt.value = i;
-      opt.textContent = `${b.height ? b.height + 'p' : ''} ${Math.round(b.bitrate / 1000)}kbps`.trim();
-      select.appendChild(opt);
+    const isAuto = !!(dashInstance.getSettings().streaming.abr.autoSwitchBitrate.video);
+    const activeIdx = dashInstance.getQualityFor ? dashInstance.getQualityFor('video') : 0;
+    const activeHeight = list[activeIdx] ? list[activeIdx].height : null;
+    renderQualityList(list, activeIdx, isAuto, activeHeight, (i) => {
+      if (i === -1) dashInstance.updateSettings({ streaming: { abr: { autoSwitchBitrate: { video: true } } } });
+      else { dashInstance.updateSettings({ streaming: { abr: { autoSwitchBitrate: { video: false } } } }); dashInstance.setQualityFor('video', i); }
     });
-    select.onchange = () => {
-      if (select.value === 'auto') dashInstance.updateSettings({ streaming: { abr: { autoSwitchBitrate: { video: true } } } });
-      else { dashInstance.updateSettings({ streaming: { abr: { autoSwitchBitrate: { video: false } } } }); dashInstance.setQualityFor('video', Number(select.value)); }
-    };
   } catch (e) { /* ignore */ }
+}
+function refreshQualityListIfOpen() {
+  if (!qualityPanel || !qualityPanel.classList.contains('open')) return;
+  if (currentQualityKind === 'hls') populateQualityFromHls();
+  else if (currentQualityKind === 'dash') populateQualityFromDash();
+}
+function openQualityPanel() {
+  // Detekte DIRÈKteman ki motè (hls.js/dash.js) aktyèlman ap jwe a, olye
+  // fè konfyans sèlman a "currentQualityKind" — sa evite panel la rete
+  // "silansye" (klike ki pa fè anyen) si yon evènman te manke pran flag la.
+  if (hlsInstance && hlsInstance.levels && hlsInstance.levels.length) {
+    currentQualityKind = 'hls';
+    populateQualityFromHls();
+  } else if (dashInstance) {
+    currentQualityKind = 'dash';
+    populateQualityFromDash();
+  } else {
+    showToast(currentIndex === -1
+      ? 'Chwazi yon chèn anvan pou wè opsyon kalite yo.'
+      : 'Pa gen plizyè kalite disponib pou stream sa a kounye a.');
+    return;
+  }
+  qualityPanel.classList.add('open');
+  qualityScrim.classList.add('open');
+}
+function closeQualityPanel() {
+  if (!qualityPanel) return;
+  qualityPanel.classList.remove('open');
+  qualityScrim.classList.remove('open');
+}
+if (btnQuality) btnQuality.onclick = () => {
+  if (qualityPanel.classList.contains('open')) closeQualityPanel(); else openQualityPanel();
+};
+if (qualityClose) qualityClose.onclick = closeQualityPanel;
+if (qualityScrim) qualityScrim.onclick = closeQualityPanel;
+
+/* Aplike "Default Quality" (Settings → Playback) yon sèl fwa lè yon nouvo
+   stream kòmanse. 'auto' pa fè anyen espre: nou kite hls.js/dash.js kontinye
+   nan mòd ABR pa defo yo, ki DEJA chwazi pi bon rezolisyon an tousèl an
+   fonksyon bann pasan/vitès entènèt yo mezire an tan reyèl — se konsa "Auto"
+   la reyèlman travay, menm jan YouTube fè l. */
+function applyDefaultQualityForNewStream() {
+  const pref = settings.defaultQuality || 'auto';
+  if (pref === 'auto') return;
+  if (currentQualityKind === 'hls' && hlsInstance && hlsInstance.levels && hlsInstance.levels.length) {
+    const order = sortedHlsLevelIndexes();
+    hlsInstance.currentLevel = pref === 'highest' ? order[order.length - 1] : order[0];
+  } else if (currentQualityKind === 'dash' && dashInstance) {
+    try {
+      const list = dashInstance.getBitrateInfoListFor('video') || [];
+      if (!list.length) return;
+      const order = list.map((b, i) => i).sort((a, b) => (list[a].height || 0) - (list[b].height || 0));
+      dashInstance.updateSettings({ streaming: { abr: { autoSwitchBitrate: { video: false } } } });
+      dashInstance.setQualityFor('video', pref === 'highest' ? order[order.length - 1] : order[0]);
+    } catch (e) { /* ignore */ }
+  }
 }
 
 /* ============================== Subtitles ============================== */
@@ -2044,6 +2145,7 @@ document.addEventListener('keydown', (e) => {
 
   if (e.key === 'Escape') {
     if (urlModal.classList.contains('open')) { closeUrlModal(); return; }
+    if (qualityPanel.classList.contains('open')) { closeQualityPanel(); return; }
     if (settingsPanel.classList.contains('open')) { closeSettingsPanel(); return; }
     if (navRail.classList.contains('open') || sidebar.classList.contains('open')) { closeMenuOverlay(); return; }
     if (fsIsActive()) { exitAnyFullscreen(); return; }

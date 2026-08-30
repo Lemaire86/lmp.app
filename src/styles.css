@@ -364,7 +364,16 @@ body.theme-light .search-box input { background: rgba(255,255,255,0.7); }
   background: radial-gradient(1000px 500px at 50% 20%, rgba(40,90,210,0.14), transparent 60%);
   overflow: hidden;
 }
-#video-el { max-width: 100%; max-height: 100%; width: 100%; height: 100%; background: black; display: none; }
+#video-el {
+  position: absolute; inset: 0; width: 100%; height: 100%; background: black; display: none;
+  /* Ranplase ansyen "width/height:100%" ki te depann de yon kalkil
+     pousantaj (%) sou yon chèn eleman flex — pafwa kalkil sa a pa rezoud
+     kòrèkteman (espesyalman sou gwo ekran/ultrawide), sa ki te fè videyo a
+     parèt piti e kole sou bò dwat ekran an olye l ranpli tout kad la.
+     Pozisyone l an "absolute" ak inset:0 anndan .stage-media (ki gen
+     position:relative) fè l toujou ranpli kad la egzakteman, kèlkeswa
+     lajè ekran an. */
+}
 #video-el.mode-fit { object-fit: contain; }
 #video-el.mode-stretch { object-fit: fill; }
 #video-el.mode-original { object-fit: none; }
@@ -521,6 +530,43 @@ kbd {
   opacity: 0; pointer-events: none; transition: opacity var(--anim-speed) ease; z-index: 55;
 }
 .nav-scrim.open { opacity: 1; pointer-events: auto; }
+
+/* ---------------- Quality menu (tankou YouTube) ---------------- */
+.quality-scrim {
+  position: fixed; inset: 0; background: rgba(2,5,14,0.55); backdrop-filter: blur(2px);
+  opacity: 0; pointer-events: none; transition: opacity var(--anim-speed) ease; z-index: 61;
+}
+.quality-scrim.open { opacity: 1; pointer-events: auto; }
+.quality-panel {
+  position: fixed; top: 50%; left: 50%; width: min(360px, 92vw); max-height: min(70vh, 520px);
+  transform: translate(-50%, -50%) scale(0.94); opacity: 0; pointer-events: none;
+  border-radius: var(--radius-lg); z-index: 62; display: flex; flex-direction: column; overflow: hidden;
+  transition: transform var(--anim-speed) cubic-bezier(.2,.8,.3,1), opacity var(--anim-speed) ease;
+}
+.quality-panel.open { transform: translate(-50%, -50%) scale(1); opacity: 1; pointer-events: auto; }
+.quality-panel-head {
+  display: flex; align-items: center; gap: 10px; padding: 14px 18px; flex-shrink: 0;
+  border-bottom: 1px solid var(--panel-border);
+}
+.quality-back {
+  width: 26px; height: 26px; border-radius: 50%; border: none; background: transparent; color: var(--ink-0);
+  font-size: 20px; line-height: 1; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0 0 2px;
+}
+.quality-back:hover { background: rgba(255,255,255,0.08); }
+.quality-panel-head h3 { margin: 0; font-size: 15px; font-weight: 700; color: var(--ink-0); }
+.quality-list { overflow-y: auto; padding: 6px 0; }
+.quality-item {
+  width: 100%; display: flex; align-items: baseline; gap: 6px; background: transparent; border: none;
+  color: var(--ink-1); font-size: 15px; text-align: left; cursor: pointer; padding: 12px 20px;
+}
+.quality-item:hover { background: rgba(255,255,255,0.05); }
+.quality-item.active { color: var(--blue-3); font-weight: 700; }
+.quality-item .quality-badge {
+  font-size: 10px; font-weight: 700; color: var(--ink-2); border: 1px solid var(--panel-border);
+  border-radius: 4px; padding: 1px 4px; letter-spacing: .3px;
+}
+.quality-item.active .quality-badge { color: var(--blue-3); border-color: var(--blue-3); }
+.quality-item .quality-auto-current { font-size: 11.5px; color: var(--ink-2); margin-left: 2px; }
 
 /* ---------------- Settings slide-in panel ---------------- */
 .settings-scrim {
