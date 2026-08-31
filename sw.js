@@ -20,22 +20,22 @@ const SHELL_FILES = [
   './manifest.json'
 ];
 
-self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then((cache) => cache.addAll(SHELL_FILES))
-      .catch(() => {}) // pa bloke enstalasyon an si youn nan fichye yo pa jwenn
-  );
-  self.skipWaiting();
-});
+self.addEventListener('fetch', (event) => {
+  const req = event.request;
+  if (req.method !== 'GET' || new URL(req.url).origin !== self.location.origin) return;
 
-self.addEventListener('activate', (event) => {
-  event.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k)))
-    )
+  const isShellFile = SHELL_FILES.some((f) => req.url.endsWith(f.replace('./', '/')));
+  if (!isShellFile) return;
+
+  event.respondWith(
+    fetch(req, { cache: 'no-store' }).then((res) => {
+      if (res && res.ok) {
+        const resToCache = res.clone(); // clone IMEDYATMAN, anvan okenn lòt "await"
+        caches.open(CACHE_NAME).then((c) => c.put(req, resToCache));
+      }
+      return res;
+    }).catch(() => caches.match(req))
   );
-  self.clients.claim();
 });
 
 /* ⚠️ REZOUD BOUG KACH: anvan, estrateji a te "cached || network" — sa te fè
