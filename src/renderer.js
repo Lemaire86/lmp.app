@@ -1620,36 +1620,38 @@ function refreshQualityListIfOpen() {
   else if (currentQualityKind === 'dash') populateQualityFromDash();
 }
 function openQualityPanel() {
-  let hasQuality = false;
-
   if (hlsInstance) {
     currentQualityKind = 'hls';
-    if (hlsInstance.levels && hlsInstance.levels.length) {
-      populateQualityFromHls();
-      hasQuality = true;
+
+    // Si HLS poko fin parse, tann 300ms epi re-teste
+    if (!hlsInstance.levels || !hlsInstance.levels.length) {
+      setTimeout(() => {
+        if (hlsInstance.levels && hlsInstance.levels.length) {
+          populateQualityFromHls();
+          qualityPanel.classList.add('open');
+          qualityScrim.classList.add('open');
+        } else {
+          showToast('Pa gen plizyè kalite disponib pou stream sa a kounye a.');
+        }
+      }, 300);
+      return;
     }
-  }
 
-  if (!hasQuality && dashInstance) {
-    currentQualityKind = 'dash';
-    try {
-      const list = dashInstance.getBitrateInfoListFor('video') || [];
-      if (list.length) {
-        populateQualityFromDash();
-        hasQuality = true;
-      }
-    } catch (e) { /* ignore */ }
-  }
-
-  if (!hasQuality) {
-    showToast(currentIndex === -1
-      ? 'Chwazi yon chèn anvan pou wè opsyon kalite yo.'
-      : 'Pa gen plizyè kalite disponib pou stream sa a kounye a.');
+    populateQualityFromHls();
+    qualityPanel.classList.add('open');
+    qualityScrim.classList.add('open');
     return;
   }
 
-  qualityPanel.classList.add('open');
-  qualityScrim.classList.add('open');
+  if (dashInstance) {
+    currentQualityKind = 'dash';
+    populateQualityFromDash();
+    qualityPanel.classList.add('open');
+    qualityScrim.classList.add('open');
+    return;
+  }
+
+  showToast('Pa gen plizyè kalite disponib pou stream sa a kounye a.');
 }
 
 function closeQualityPanel() {
