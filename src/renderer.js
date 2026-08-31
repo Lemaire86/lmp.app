@@ -1620,24 +1620,38 @@ function refreshQualityListIfOpen() {
   else if (currentQualityKind === 'dash') populateQualityFromDash();
 }
 function openQualityPanel() {
-  // Detekte DIRÈKteman ki motè (hls.js/dash.js) aktyèlman ap jwe a, olye
-  // fè konfyans sèlman a "currentQualityKind" — sa evite panel la rete
-  // "silansye" (klike ki pa fè anyen) si yon evènman te manke pran flag la.
-  if (hlsInstance && hlsInstance.levels && hlsInstance.levels.length) {
+  let hasQuality = false;
+
+  if (hlsInstance) {
     currentQualityKind = 'hls';
-    populateQualityFromHls();
-  } else if (dashInstance) {
+    if (hlsInstance.levels && hlsInstance.levels.length) {
+      populateQualityFromHls();
+      hasQuality = true;
+    }
+  }
+
+  if (!hasQuality && dashInstance) {
     currentQualityKind = 'dash';
-    populateQualityFromDash();
-  } else {
+    try {
+      const list = dashInstance.getBitrateInfoListFor('video') || [];
+      if (list.length) {
+        populateQualityFromDash();
+        hasQuality = true;
+      }
+    } catch (e) { /* ignore */ }
+  }
+
+  if (!hasQuality) {
     showToast(currentIndex === -1
       ? 'Chwazi yon chèn anvan pou wè opsyon kalite yo.'
       : 'Pa gen plizyè kalite disponib pou stream sa a kounye a.');
     return;
   }
+
   qualityPanel.classList.add('open');
   qualityScrim.classList.add('open');
 }
+
 function closeQualityPanel() {
   if (!qualityPanel) return;
   qualityPanel.classList.remove('open');
